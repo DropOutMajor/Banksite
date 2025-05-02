@@ -46,7 +46,7 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
+            '^/paymentform': {
                 target: 'https://localhost:7249/',
                 secure: false
             },

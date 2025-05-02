@@ -10,57 +10,74 @@ function PaymentForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Replace this URL with your backend API endpoint
-        const response = await fetch('https://localhost:5001/api/payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ amount, currency, bank }),
-        });
+        try {
+            const response = await fetch('/paymentform', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ amount, currency, bank }),
+            });
 
-        if (response.ok) {
-            setMessage('Payment processed successfully!');
-            setAmount('');
-        } else {
-            const error = await response.text();
-            setMessage(`Payment failed: ${error}`);
+            if (response.ok) {
+                setMessage('Payment processed successfully!');
+                setAmount('');
+                setCurrency('USD');
+                setBank('Standard Bank');
+            } else {
+                const errorText = await response.text();
+                setMessage(`Payment failed: ${errorText}`);
+            }
+        } catch (error) {
+            setMessage(`Network error: ${error}`);
         }
     };
 
     return (
-        <div>
-            <h1>Make a Payment</h1>
-            <form onSubmit={handleSubmit} className="form">
+        <div className="containerbox">
+            <h3>Make a Payment</h3>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Amount:</label>
+                    <label htmlFor="amount">Amount:</label>
                     <input
                         type="number"
+                        id="amount"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                         required
                     />
                 </div>
+
                 <div>
-                    <label>Currency:</label>
-                    <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+                    <label htmlFor="currency">Currency:</label>
+                    <select
+                        id="currency"
+                        value={currency}
+                        onChange={(e) => setCurrency(e.target.value)}
+                    >
                         <option value="USD">USD</option>
                         <option value="ZAR">ZAR</option>
                         <option value="EUR">EUR</option>
                     </select>
                 </div>
+
                 <div>
-                    <label>Bank:</label>
-                    <select value={bank} onChange={(e) => setBank(e.target.value)}>
+                    <label htmlFor="bank">Bank:</label>
+                    <select
+                        id="bank"
+                        value={bank}
+                        onChange={(e) => setBank(e.target.value)}
+                    >
                         <option value="Standard Bank">Standard Bank</option>
                         <option value="FNB">FNB</option>
                         <option value="ABSA">ABSA</option>
-                        <option value="Capitec">Capitec</option>
                     </select>
                 </div>
+
                 <button type="submit">Submit Payment</button>
             </form>
-            {message && <p>{message}</p>}
+
+            {message && <p className="message">{message}</p>}
         </div>
     );
 }

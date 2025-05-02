@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ReactApp1.Server.Models;
 
 namespace ReactApp1.Server.Data
 {
@@ -9,6 +10,7 @@ namespace ReactApp1.Server.Data
             : base(options)
         {
         }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

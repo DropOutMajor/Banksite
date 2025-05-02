@@ -1,28 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using ReactApp1.Server.Data;
+using ReactApp1.Server.Models; // Assuming the Payment model is inside the Models folder
 
 namespace ReactApp1.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("paymentform")] // Changed the route to 'paymentform' as per the frontend request
     public class PaymentController : ControllerBase
     {
+        private readonly ApplicationDbContext _context;
+
+        public PaymentController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         [HttpPost]
-        [Route("payment")]
-        public IActionResult ProcessPayment([FromBody] PaymentDto payment)
+        public async Task<IActionResult> ProcessPayment([FromBody] Payment payment)
         {
             if (payment.Amount <= 0 || string.IsNullOrEmpty(payment.Currency) || string.IsNullOrEmpty(payment.Bank))
                 return BadRequest("Invalid payment details.");
 
-            // Simulate saving to database or processing logic
-            return Ok("Payment successful.");
-        }
+            // Add payment to the database
+            _context.Payments.Add(payment);
+            await _context.SaveChangesAsync();
 
-        public class PaymentDto
-        {
-            public decimal Amount { get; set; }
-            public string Currency { get; set; }
-            public string Bank { get; set; }
+            // Return a success message after saving
+            return Ok("Payment successful.");
         }
     }
 }
