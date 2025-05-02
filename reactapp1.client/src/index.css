@@ -1,0 +1,67 @@
+.containerbox {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(106, 27, 154, 0.2); /* Discovery purple shadow */
+    background-color: #FFFFFF;
+    padding: 30px;
+    text-align: left;
+    max-width: 500px;
+    margin: 2rem auto;
+    border-left: 6px solid #6A1B9A;
+}
+
+    .containerbox h3 {
+        color: #6A1B9A;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .containerbox form > div {
+        margin-bottom: 1rem;
+    }
+
+label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+input[type="checkbox"] {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+button {
+    background-color: #6A1B9A;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+    button:hover {
+        background-color: #4A0072;
+    }
+
+.error {
+    color: #D32F2F;
+    font-weight: 500;
+    margin-top: 1rem;
+    text-align: center;
+}
