@@ -33,7 +33,7 @@ function Login() {
             setError("");
 
             if (email === "admin@gmail.com" && password === "Admin@1234") {
-                navigate("/employee-portal");
+                navigate("/employee");
                 return;
             }
 

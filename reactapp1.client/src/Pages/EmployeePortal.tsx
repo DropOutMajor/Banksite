@@ -1,7 +1,6 @@
 // src/Pages/EmployeePortal.tsx
 import { useEffect, useState } from 'react';
 
-
 interface Payment {
     id: number;
     amount: number;
@@ -15,83 +14,51 @@ export default function EmployeePortal() {
     const [payments, setPayments] = useState<Payment[]>([]);
     const [error, setError] = useState<string>('');
 
-    // Fetch all payments on mount
     useEffect(() => {
-        fetch('/api/payment/all', {
+        fetch('/paymentform', {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
         })
             .then(async (response) => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch payments.');
-                }
-                const data: Payment[] = await response.json();
+                if (!response.ok) throw new Error('Failed to fetch payments');
+                const data = await response.json();
                 setPayments(data);
             })
-            .catch((err: unknown) => {
-                if (err instanceof Error) {
-                    setError(err.message);
-                } else {
-                    setError('An unknown error occurred.');
-                }
+            .catch((err) => {
+                setError(err instanceof Error ? err.message : 'Unknown error');
             });
     }, []);
 
-    // Approve a payment by its Id
     const approve = async (id: number) => {
         try {
-            const response = await fetch(`/api/payment/${id}/approve`, {
+            const res = await fetch(`/paymentform/${id}/approve`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({}),
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
             });
-
-            if (!response.ok) {
-                throw new Error('Approve failed.');
-            }
-
+            if (!res.ok) throw new Error('Approve failed');
             setPayments((prev) =>
                 prev.map((p) =>
-                    p.id === id
-                        ? { ...p, isApproved: true, approvedAt: new Date().toISOString() }
-                        : p
+                    p.id === id ? { ...p, isApproved: true, approvedAt: new Date().toISOString() } : p
                 )
             );
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unknown error occurred.');
-            }
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Unknown error');
         }
     };
 
-    // Reject (delete) a payment by its Id
     const reject = async (id: number) => {
         try {
-            const response = await fetch(`/api/payment/${id}/reject`, {
+            const res = await fetch(`/paymentform/${id}/reject`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({}),
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
             });
-
-            if (!response.ok) {
-                throw new Error('Reject failed.');
-            }
-
+            if (!res.ok) throw new Error('Reject failed');
             setPayments((prev) => prev.filter((p) => p.id !== id));
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unknown error occurred.');
-            }
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Unknown error');
         }
     };
 
@@ -119,9 +86,7 @@ export default function EmployeePortal() {
                             <td>{p.currency}</td>
                             <td>{p.bank}</td>
                             <td>{p.isApproved ? 'Approved' : 'Pending'}</td>
-                            <td>
-                                {p.approvedAt ? new Date(p.approvedAt).toLocaleString() : '-'}
-                            </td>
+                            <td>{p.approvedAt ? new Date(p.approvedAt).toLocaleString() : '-'}</td>
                             <td>
                                 {!p.isApproved && (
                                     <>

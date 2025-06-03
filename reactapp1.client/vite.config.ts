@@ -62,6 +62,11 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false,
             },
+            '/employeeportal': {
+                target: 'https://localhost:7249',
+                changeOrigin: true,
+                secure: false,
+            },
             '/pingauth': {
                 target: 'https://localhost:7249',
                 changeOrigin: true,
