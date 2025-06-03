@@ -11,6 +11,8 @@ namespace ReactApp1.Server.Data
         {
         }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<BankDetails> BankDetails { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
