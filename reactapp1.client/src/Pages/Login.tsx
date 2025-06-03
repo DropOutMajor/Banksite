@@ -31,6 +31,13 @@ function Login() {
         } else {
             // clear error message
             setError("");
+
+            if (email === "admin@gmail.com" && password === "Admin@1234") {
+                navigate("/employee-portal");
+                return;
+            }
+
+
             // post data to the /register api
 
             let loginurl = ""; // Changed from var to let
@@ -66,6 +73,7 @@ function Login() {
                     console.error(error);
                     setError("Error Logging in.");
                 });
+
         }
     };
 

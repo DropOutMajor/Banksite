@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReactApp1.Server.Data;
-using ReactApp1.Server.Models; // Assuming the Payment model is inside the Models folder
+using ReactApp1.Server.Models;
 
 namespace ReactApp1.Server.Controllers
 {
     [ApiController]
-    [Route("paymentform")] // Changed the route to 'paymentform' as per the frontend request
+    [Route("paymentform")]
     public class PaymentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -18,15 +18,18 @@ namespace ReactApp1.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> ProcessPayment([FromBody] Payment payment)
         {
-            if (payment.Amount <= 0 || string.IsNullOrEmpty(payment.Currency) || string.IsNullOrEmpty(payment.Bank))
-                return BadRequest("Invalid payment details.");
+            // 1) Server‐side validation using Data Annotations
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            // Add payment to the database
+            // 2) At this point, Amount > 0, Currency matches /^[A-Z]{3}$/, etc., per model attributes
+
+            // 3) Save to database
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            // Return a success message after saving
-            return Ok("Payment successful.");
+            // 4) Return the newly created Id for downstream use (e.g., linking BankDetails)
+            return Ok(new { id = payment.Id });
         }
     }
 }

@@ -59,7 +59,9 @@ namespace ReactApp1.Server.Migrations
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Bank = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    ApprovedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -235,7 +237,8 @@ namespace ReactApp1.Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BankDetails_PaymentId",
                 table: "BankDetails",
-                column: "PaymentId");
+                column: "PaymentId",
+                unique: true);
         }
 
         /// <inheritdoc />

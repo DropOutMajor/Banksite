@@ -1,6 +1,6 @@
 // src/Pages/EmployeePortal.tsx
 import { useEffect, useState } from 'react';
-import './EmployeePortal.css';
+
 
 interface Payment {
     id: number;

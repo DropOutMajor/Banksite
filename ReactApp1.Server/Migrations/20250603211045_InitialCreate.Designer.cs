@@ -12,8 +12,8 @@ using ReactApp1.Server.Data;
 namespace ReactApp1.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250502200156_AddBankDetails")]
-    partial class AddBankDetails
+    [Migration("20250603211045_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -244,7 +244,8 @@ namespace ReactApp1.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentId");
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
 
                     b.ToTable("BankDetails");
                 });
@@ -260,6 +261,9 @@ namespace ReactApp1.Server.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Bank")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -270,6 +274,9 @@ namespace ReactApp1.Server.Migrations
                     b.Property<string>("Currency")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -330,12 +337,18 @@ namespace ReactApp1.Server.Migrations
             modelBuilder.Entity("ReactApp1.Server.Models.BankDetails", b =>
                 {
                     b.HasOne("ReactApp1.Server.Models.Payment", "Payment")
-                        .WithMany()
-                        .HasForeignKey("PaymentId")
+                        .WithOne("BankDetails")
+                        .HasForeignKey("ReactApp1.Server.Models.BankDetails", "PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("ReactApp1.Server.Models.Payment", b =>
+                {
+                    b.Navigation("BankDetails")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
